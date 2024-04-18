@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.scss";
+import Navbar from "./Navbar/Navbar";
+import Maincopy from "./Maincopy/Maincopy";
+import beers from "./Data/Data";
+import { useState, FormEvent } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [abvCheck, setAbvCheck] = useState<boolean>(false);
+  const [rangeCheck, setRangeCheck] = useState<boolean>(false);
+  const [acidityCheck, setAcidityCheck] = useState<boolean>(false);
+
+  const handleSearchInput = (event: FormEvent<HTMLInputElement>) => {
+    const cleanedInput = event.currentTarget.value.toLowerCase();
+    setSearchTerm(cleanedInput);
+    console.log(cleanedInput);
+  };
+
+  const handleAbvBox = () => {
+    setAbvCheck(!abvCheck);
+  };
+  const filteredArr = beers.filter((beer) =>
+    beer.name.toLowerCase().includes(searchTerm)
+  );
+
+  const handleRangeBox = () => {
+    setRangeCheck(!rangeCheck);
+  };
+  const handleacidityBox = () => {
+    setAcidityCheck(!acidityCheck);
+  };
+  console.log(abvCheck);
+  console.log(rangeCheck);
+  console.log(acidityCheck);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="punkapi">
+      <Navbar
+        beers={beers}
+        handleSearchTerm={handleSearchInput}
+        searchTerm={searchTerm}
+        handleAbvBox={handleAbvBox}
+        handleacidityBox={handleacidityBox}
+        handleRangeBox={handleRangeBox}
+      />
+      <Maincopy searchTerm={searchTerm} />
+    </div>
+  );
+};
 
-export default App
+export default App;

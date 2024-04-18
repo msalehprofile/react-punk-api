@@ -1,0 +1,8 @@
+.navigation {
+    display: grid;
+    background-color: green;
+    width: 20vw;
+    height: auto;
+    place-content: center;
+    grid-template-rows: repeat(100,1fr);
+}

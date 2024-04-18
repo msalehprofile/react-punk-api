@@ -1,0 +1,9 @@
+.maincopy {
+  width: 100%;
+  background-color: red;
+
+  &__beers {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+  }
+}
