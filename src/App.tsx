@@ -1,14 +1,37 @@
 import "./App.scss";
 import Navbar from "./Navbar/Navbar";
 import Maincopy from "./Maincopy/Maincopy";
-import beers from "./Data/Data";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
+import { Beer } from "./Data/beertypes";
 
 const App = () => {
+  const [beers, setBeers] = useState<Beer[]>([])
+
+  
+    useEffect(() => {
+      const getBeers = async () => {
+          const response = await fetch("http://localhost:3333/v2/beers");
+  
+          if (!response.ok) {
+            console.log(`Unsuccessful fetch, error code was: ${response.status}`);
+            return;
+          }
+  
+          const data: Beer[] = await response.json();
+          setBeers(data);
+          console.log(data);
+
+      }
+      console.log(getBeers())
+    });
+      console.log(beers)
+// getBeers()
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [abvCheck, setAbvCheck] = useState<boolean>(false);
   const [rangeCheck, setRangeCheck] = useState<boolean>(false);
   const [acidityCheck, setAcidityCheck] = useState<boolean>(false);
+
 
   const handleSearchInput = (event: FormEvent<HTMLInputElement>) => {
     const cleanedInput = event.currentTarget.value.toLowerCase();
@@ -78,7 +101,7 @@ const App = () => {
         handleacidityBox={handleacidityBox}
         handleRangeBox={handleRangeBox}
       />
-      <Maincopy searchTerm={searchTerm} filteredByName={filteredByName} />
+      <Maincopy searchTerm={searchTerm} data={beers} />
     </div>
   );
 };
