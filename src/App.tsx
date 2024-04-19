@@ -16,22 +16,57 @@ const App = () => {
     console.log(cleanedInput);
   };
 
+  const filteredByName = beers.filter((beer) =>
+    beer.name.toLowerCase().includes(searchTerm)
+  );
+
   const handleAbvBox = () => {
     setAbvCheck(!abvCheck);
   };
-  const filteredArr = beers.filter((beer) =>
-    beer.name.toLowerCase().includes(searchTerm)
-  );
 
   const handleRangeBox = () => {
     setRangeCheck(!rangeCheck);
   };
+
+  const filteredByRange = beers.filter((beer) => beer.abv > 6);
+  console.log(filteredByRange);
+
   const handleacidityBox = () => {
     setAcidityCheck(!acidityCheck);
   };
-  console.log(abvCheck);
-  console.log(rangeCheck);
-  console.log(acidityCheck);
+
+  const filteredByAcidity = beers.filter((beer) => beer.abv > 6);
+  console.log(filteredByAcidity);
+
+  const filterSelection = () => {
+    if (searchTerm === "" && !abvCheck && !rangeCheck && !acidityCheck) {
+      return beers;
+    } else if (
+      searchTerm != "" &&
+      abvCheck == false &&
+      rangeCheck == false &&
+      acidityCheck == false
+    ) {
+      return beers.filter((beer) =>
+        beer.name.toLowerCase().includes(searchTerm)
+      );
+    } else if (
+      searchTerm === "" &&
+      abvCheck == true &&
+      rangeCheck == false &&
+      acidityCheck == false
+    ) {
+      return beers.filter((beer) => beer.abv > 6);
+    } else if (
+      searchTerm === "" &&
+      abvCheck == false &&
+      rangeCheck == true &&
+      acidityCheck == false
+    ) {
+      return beers.filter((beer) => Number(beer.first_brewed.slice(3)) < 2010);
+    }
+  };
+  console.log(filterSelection());
 
   return (
     <div className="punkapi">
@@ -43,7 +78,7 @@ const App = () => {
         handleacidityBox={handleacidityBox}
         handleRangeBox={handleRangeBox}
       />
-      <Maincopy searchTerm={searchTerm} />
+      <Maincopy searchTerm={searchTerm} filteredByName={filteredByName} />
     </div>
   );
 };
