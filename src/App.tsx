@@ -1,24 +1,69 @@
 import "./App.scss";
 import Navbar from "./Navbar/Navbar";
 import Maincopy from "./Maincopy/Maincopy";
-import beers from "./Data/Data";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
+import { Beer } from "./Data/beertypes";
 
 const App = () => {
+  const [beers, setBeers] = useState<Beer[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [abvCheck, setAbvCheck] = useState<boolean>(false);
   const [rangeCheck, setRangeCheck] = useState<boolean>(false);
   const [acidityCheck, setAcidityCheck] = useState<boolean>(false);
 
+  const getBeers = async (abvCheck: boolean, rangeCheck: boolean, searchTerm: string) => {
+    const url = `http://localhost:3333/v2/beers/?page=4&per_page=10`;
+    let updatedURL = url;
+
+    if (abvCheck && !rangeCheck && searchTerm === "") {
+      updatedURL += `&abv_gt=6`;
+    } 
+
+    if (rangeCheck && !abvCheck && searchTerm === "") {
+      updatedURL += `&brewed_before=12/2009`;
+    } 
+
+    if (searchTerm != "" && !abvCheck && !rangeCheck) {
+      updatedURL += `&beer_name=${searchTerm}`;
+    }
+
+    if (rangeCheck && abvCheck && searchTerm === "") {
+      updatedURL += `&brewed_before=12/2009&abv_gt=6`
+    } 
+
+    if (rangeCheck && !abvCheck && searchTerm != "") {
+      updatedURL += `/?brewed_before=12/2009&beer_name=${searchTerm}`
+    } 
+
+    if (!rangeCheck && abvCheck && searchTerm != "") {
+      updatedURL += `/?abv_gt=6&beer_name=${searchTerm}`
+    } 
+
+    if (rangeCheck && abvCheck && searchTerm != "") {
+      updatedURL += `/?abv_gt=6&brewed_before=12/2009&beer_name=${searchTerm}`
+    } 
+
+    const response = await fetch(updatedURL);
+
+    if (!response.ok) {
+      console.log(`Unsuccessful fetch, error code was: ${response.status}`);
+      return;
+    }
+
+    const data: Beer[] = await response.json();
+    setBeers(data);
+  };
+
+  console.log(beers);
+
+  useEffect(() => {
+    getBeers(abvCheck, rangeCheck, searchTerm);
+  }, [abvCheck, rangeCheck, searchTerm]);
+
   const handleSearchInput = (event: FormEvent<HTMLInputElement>) => {
     const cleanedInput = event.currentTarget.value.toLowerCase();
     setSearchTerm(cleanedInput);
-    console.log(cleanedInput);
   };
-
-  const filteredByName = beers.filter((beer) =>
-    beer.name.toLowerCase().includes(searchTerm)
-  );
 
   const handleAbvBox = () => {
     setAbvCheck(!abvCheck);
@@ -28,45 +73,9 @@ const App = () => {
     setRangeCheck(!rangeCheck);
   };
 
-  const filteredByRange = beers.filter((beer) => beer.abv > 6);
-  console.log(filteredByRange);
-
   const handleacidityBox = () => {
     setAcidityCheck(!acidityCheck);
   };
-
-  const filteredByAcidity = beers.filter((beer) => beer.abv > 6);
-  console.log(filteredByAcidity);
-
-  const filterSelection = () => {
-    if (searchTerm === "" && !abvCheck && !rangeCheck && !acidityCheck) {
-      return beers;
-    } else if (
-      searchTerm != "" &&
-      abvCheck == false &&
-      rangeCheck == false &&
-      acidityCheck == false
-    ) {
-      return beers.filter((beer) =>
-        beer.name.toLowerCase().includes(searchTerm)
-      );
-    } else if (
-      searchTerm === "" &&
-      abvCheck == true &&
-      rangeCheck == false &&
-      acidityCheck == false
-    ) {
-      return beers.filter((beer) => beer.abv > 6);
-    } else if (
-      searchTerm === "" &&
-      abvCheck == false &&
-      rangeCheck == true &&
-      acidityCheck == false
-    ) {
-      return beers.filter((beer) => Number(beer.first_brewed.slice(3)) < 2010);
-    }
-  };
-  console.log(filterSelection());
 
   return (
     <div className="punkapi">
@@ -78,7 +87,7 @@ const App = () => {
         handleacidityBox={handleacidityBox}
         handleRangeBox={handleRangeBox}
       />
-      <Maincopy searchTerm={searchTerm} filteredByName={filteredByName} />
+      <Maincopy searchTerm={searchTerm} beers={beers} />
     </div>
   );
 };
