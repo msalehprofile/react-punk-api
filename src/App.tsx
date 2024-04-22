@@ -14,36 +14,44 @@ const App = () => {
   const getBeers = async (
     abvCheck: boolean,
     rangeCheck: boolean,
-    searchTerm: string
+    searchTerm: string,
+    acidityCheck: boolean
   ) => {
-    const url = `http://localhost:3333/v2/beers`;
+    for (let i=0; i <8; i++) {
+    const url = `http://localhost:3333/v2/beers?page=${[i]}&per_page=50`;
     let updatedURL = url;
 
+    }
     if (abvCheck && !rangeCheck && searchTerm === "") {
-      updatedURL += `/?abv_gt=6`;
+      updatedURL = url + `&abv_gt=6`;
     }
+    console.log(abvCheck);
+    console.log(rangeCheck);
+    console.log(updatedURL);
 
-    if (rangeCheck && !abvCheck && searchTerm === "") {
-      updatedURL += `/?brewed_before=12/2009`;
+    if (rangeCheck === true && abvCheck === false && searchTerm === "") {
+      updatedURL = url + `&brewed_before=12/2009`;
     }
-
-    if (searchTerm != "" && !abvCheck && !rangeCheck) {
-      updatedURL += `/?beer_name=${searchTerm}`;
+    console.log(updatedURL);
+    if (searchTerm != "" && abvCheck === false && rangeCheck === false) {
+      updatedURL = url + `&beer_name=${searchTerm}`;
     }
-
-    if (rangeCheck && abvCheck && searchTerm === "") {
-      updatedURL += `/?brewed_before=12/2009&abv_gt=6`;
+    console.log(updatedURL);
+    console.log("search term", searchTerm);
+    if (rangeCheck === true && abvCheck === true && searchTerm === "") {
+      updatedURL = url + `/?brewed_before=12/2009&abv_gt=6`;
     }
+    console.log(updatedURL);
 
-    if (rangeCheck && !abvCheck && searchTerm != "") {
+    if (rangeCheck === true && abvCheck === false && searchTerm != "") {
       updatedURL += `/?brewed_before=12/2009&beer_name=${searchTerm}`;
     }
 
-    if (!rangeCheck && abvCheck && searchTerm != "") {
+    if (rangeCheck === false && abvCheck === true && searchTerm != "") {
       updatedURL += `/?abv_gt=6&beer_name=${searchTerm}`;
     }
 
-    if (rangeCheck && abvCheck && searchTerm != "") {
+    if (rangeCheck === true && abvCheck === true && searchTerm != "") {
       updatedURL += `/?abv_gt=6&brewed_before=12/2009&beer_name=${searchTerm}`;
     }
 
@@ -56,13 +64,18 @@ const App = () => {
 
     const data: Beer[] = await response.json();
     setBeers(data);
+
+    if (acidityCheck === true) {
+      const filteredAcidity = beers.filter((beer) => beer.ph < 4);
+      setBeers(filteredAcidity);
+    }
   };
 
   console.log(beers);
 
   useEffect(() => {
-    getBeers(abvCheck, rangeCheck, searchTerm);
-  }, [abvCheck, rangeCheck, searchTerm]);
+    getBeers(abvCheck, rangeCheck, searchTerm, acidityCheck);
+  }, [abvCheck, rangeCheck, searchTerm, acidityCheck]);
 
   const handleSearchInput = (event: FormEvent<HTMLInputElement>) => {
     const cleanedInput = event.currentTarget.value.toLowerCase();
