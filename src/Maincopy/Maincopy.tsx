@@ -12,7 +12,6 @@ const Maincopy = ({beers}: searching) => {
   console.log(beers)
   return (
     <div className="maincopy">
-        <h1>PUNK API</h1>
         <div className="maincopy__beers">
         {beers.map((beer) => <Beercard name={beer.name} image_url={beer.image_url} description={beer.description} abv={beer.abv} ph={beer.ph} first_brewed={beer.first_brewed} key={beer.name} />)}
         </div>

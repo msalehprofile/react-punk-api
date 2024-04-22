@@ -1,8 +1,20 @@
 .navigation {
     display: grid;
     background-color: green;
-    width: 20vw;
+    width: 100vw;
     height: auto;
-    place-content: center;
-    grid-template-rows: repeat(100,1fr);
+    grid-template-rows: repeat(2,1fr);
+    place-items: center;
+}
+
+@media screen and (min-width: 1000px) {
+    .navigation {
+        grid-column: 1;
+        grid-row: 2/3;
+        width: 20vw;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 }

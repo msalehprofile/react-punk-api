@@ -11,37 +11,41 @@ const App = () => {
   const [rangeCheck, setRangeCheck] = useState<boolean>(false);
   const [acidityCheck, setAcidityCheck] = useState<boolean>(false);
 
-  const getBeers = async (abvCheck: boolean, rangeCheck: boolean, searchTerm: string) => {
-    const url = `http://localhost:3333/v2/beers/?page=4&per_page=10`;
+  const getBeers = async (
+    abvCheck: boolean,
+    rangeCheck: boolean,
+    searchTerm: string
+  ) => {
+    const url = `http://localhost:3333/v2/beers`;
     let updatedURL = url;
 
     if (abvCheck && !rangeCheck && searchTerm === "") {
-      updatedURL += `&abv_gt=6`;
-    } 
+      updatedURL += `/?abv_gt=6`;
+    }
 
     if (rangeCheck && !abvCheck && searchTerm === "") {
-      updatedURL += `&brewed_before=12/2009`;
-    } 
+      updatedURL += `/?brewed_before=12/2009`;
+    }
 
     if (searchTerm != "" && !abvCheck && !rangeCheck) {
-      updatedURL += `&beer_name=${searchTerm}`;
+      updatedURL += `/?beer_name=${searchTerm}`;
     }
 
     if (rangeCheck && abvCheck && searchTerm === "") {
-      updatedURL += `&brewed_before=12/2009&abv_gt=6`
-    } 
+      updatedURL += `/?brewed_before=12/2009&abv_gt=6`;
+    }
 
     if (rangeCheck && !abvCheck && searchTerm != "") {
-      updatedURL += `/?brewed_before=12/2009&beer_name=${searchTerm}`
-    } 
+      updatedURL += `/?brewed_before=12/2009&beer_name=${searchTerm}`;
+    }
 
     if (!rangeCheck && abvCheck && searchTerm != "") {
-      updatedURL += `/?abv_gt=6&beer_name=${searchTerm}`
-    } 
+      updatedURL += `/?abv_gt=6&beer_name=${searchTerm}`;
+    }
 
     if (rangeCheck && abvCheck && searchTerm != "") {
-      updatedURL += `/?abv_gt=6&brewed_before=12/2009&beer_name=${searchTerm}`
-    } 
+      updatedURL += `/?abv_gt=6&brewed_before=12/2009&beer_name=${searchTerm}`;
+    }
 
     const response = await fetch(updatedURL);
 
@@ -79,6 +83,7 @@ const App = () => {
 
   return (
     <div className="punkapi">
+      <h1 className="punkapi__name">BREWDOG</h1>
       <Navbar
         beers={beers}
         handleSearchTerm={handleSearchInput}
