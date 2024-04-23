@@ -7,10 +7,11 @@ type SearchBoxProps = {
 }
 const Searchbox = ({searchTerm, handleSearchTerm}: SearchBoxProps) => {
   return (
-    <div className="navigation__searchbox">
+    <div className="navigation__search">
         <input type="text"
         onInput={handleSearchTerm}
-        value={searchTerm} />
+        value={searchTerm} 
+        placeholder="Seach by name" className="search__searchbox"/>
     </div>
   )
 }

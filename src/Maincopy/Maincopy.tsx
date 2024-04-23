@@ -2,6 +2,7 @@
 import Beercard from "../BeerCard/BeerCard"
 import './Maincopy.scss';
 import { Beer } from "../Data/beertypes";
+import { Link } from "react-router-dom";
 
 type searching = {
     searchTerm: string;
@@ -12,9 +13,8 @@ const Maincopy = ({beers}: searching) => {
   console.log(beers)
   return (
     <div className="maincopy">
-        <h1>PUNK API</h1>
         <div className="maincopy__beers">
-        {beers.map((beer) => <Beercard name={beer.name} image_url={beer.image_url} description={beer.description} abv={beer.abv} ph={beer.ph} first_brewed={beer.first_brewed} key={beer.name} />)}
+        {beers.map((beer) =>(<Link to={`/${beer.id}`}> <Beercard beers={beers} name={beer.name} image_url={beer.image_url} id={beer.id} key={beer.name} /> </Link>))}
         </div>
     </div>
   )

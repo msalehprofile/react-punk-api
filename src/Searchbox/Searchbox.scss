@@ -1,4 +1,17 @@
-.navigation__searchbox {
-    margin: 10px;
-    grid-row: 2;
+@use '../Variables.scss' as *;
+
+.navigation__search {
+    grid-row: 1;
+
+
+    .search__searchbox {
+        border: 1.5px solid $color-black;
+        border-radius: 15px;
+        padding: 5px;
+
+        &:focus {
+            border: 1.5px solid $color-main;
+            outline: 1px solid $color-main;
+        }
+    }
 }

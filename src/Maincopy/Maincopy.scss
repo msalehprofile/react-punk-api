@@ -1,9 +1,29 @@
 .maincopy {
-  width: 100%;
-  background-color: red;
+  width: 100vw;
 
   &__beers {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
+
+@media screen and (min-width: 800px) {
+  .maincopy {
+    height: 100%;
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+  
+    &__beers {
+      display: grid;
+      height:100%;
+      grid-template-columns: repeat(3,1fr);
+      grid-template-rows: repeat(4,1fr);
+      place-items: center;
+      gap: 10px;
+    }
+  }
+}
+
+// styling
