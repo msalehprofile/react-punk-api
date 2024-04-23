@@ -3,6 +3,10 @@ import Navbar from "./Navbar/Navbar";
 import Maincopy from "./Maincopy/Maincopy";
 import { useState, FormEvent, useEffect } from "react";
 import { Beer } from "./Data/beertypes";
+import BeerInfo from "./containers/BeerInfo";
+import Footer from "./Footer/Footer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 const App = () => {
   const [beers, setBeers] = useState<Beer[]>([]);
@@ -17,31 +21,26 @@ const App = () => {
     searchTerm: string,
     acidityCheck: boolean
   ) => {
-    for (let i=0; i <8; i++) {
-    const url = `http://localhost:3333/v2/beers?page=${[i]}&per_page=50`;
+    const url = `http://localhost:3333/v2/beers`;
     let updatedURL = url;
 
-    }
     if (abvCheck && !rangeCheck && searchTerm === "") {
-      updatedURL = url + `&abv_gt=6`;
+      updatedURL = url + `/?abv_gt=6`;
     }
-    console.log(abvCheck);
-    console.log(rangeCheck);
-    console.log(updatedURL);
 
     if (rangeCheck === true && abvCheck === false && searchTerm === "") {
-      updatedURL = url + `&brewed_before=12/2009`;
+      updatedURL = url + `/?brewed_before=12/2009`;
     }
-    console.log(updatedURL);
+
     if (searchTerm != "" && abvCheck === false && rangeCheck === false) {
-      updatedURL = url + `&beer_name=${searchTerm}`;
+      updatedURL = url + `/?beer_name=${searchTerm}`;
     }
-    console.log(updatedURL);
-    console.log("search term", searchTerm);
+
+
     if (rangeCheck === true && abvCheck === true && searchTerm === "") {
       updatedURL = url + `/?brewed_before=12/2009&abv_gt=6`;
     }
-    console.log(updatedURL);
+
 
     if (rangeCheck === true && abvCheck === false && searchTerm != "") {
       updatedURL += `/?brewed_before=12/2009&beer_name=${searchTerm}`;
@@ -71,7 +70,7 @@ const App = () => {
     }
   };
 
-  console.log(beers);
+
 
   useEffect(() => {
     getBeers(abvCheck, rangeCheck, searchTerm, acidityCheck);
@@ -95,18 +94,32 @@ const App = () => {
   };
 
   return (
-    <div className="punkapi">
-      <h1 className="punkapi__name">BREWDOG</h1>
-      <Navbar
-        beers={beers}
-        handleSearchTerm={handleSearchInput}
-        searchTerm={searchTerm}
-        handleAbvBox={handleAbvBox}
-        handleacidityBox={handleacidityBox}
-        handleRangeBox={handleRangeBox}
-      />
-      <Maincopy searchTerm={searchTerm} beers={beers} />
-    </div>
+    <BrowserRouter>
+      <div className="punkapi">
+        <h1 className="punkapi__name">BREWDOG</h1>
+
+        <Routes>
+          <Route
+            path="/"
+            element={<>
+            <Navbar
+              beers={beers}
+              handleSearchTerm={handleSearchInput}
+              searchTerm={searchTerm}
+              handleAbvBox={handleAbvBox}
+              handleacidityBox={handleacidityBox}
+              handleRangeBox={handleRangeBox}
+            />
+            <Maincopy searchTerm={searchTerm} beers={beers}/>
+            </>}
+          />
+
+
+          <Route path="/:beerId" element={<BeerInfo beers={beers}/>}/>
+        </Routes>
+        <Footer/>
+      </div>
+    </BrowserRouter>
   );
 };
 

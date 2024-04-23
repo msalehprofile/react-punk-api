@@ -1,6 +1,5 @@
 .maincopy {
   width: 100vw;
-  background-color: red;
 
   &__beers {
     display: flex;
@@ -9,15 +8,12 @@
   }
 }
 
-
 @media screen and (min-width: 800px) {
   .maincopy {
     height: 100%;
     grid-column: 2;
     grid-row: 2;
     width: 100%;
-    
-
   
     &__beers {
       display: grid;
@@ -27,6 +23,7 @@
       place-items: center;
       gap: 10px;
     }
-
   }
 }
+
+// styling

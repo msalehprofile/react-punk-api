@@ -1,6 +1,14 @@
+@use '../Variables.scss' as *;
+
 .checkbox-options {
-    grid-row: 2;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  .checkbox__option--box {
+    &:checked {
+      accent-color: $color-main;
+    }
+  }
 }
