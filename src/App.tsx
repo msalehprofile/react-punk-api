@@ -5,6 +5,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { Beer } from "./Data/beertypes";
 import BeerInfo from "./containers/BeerInfo";
 import Footer from "./Footer/Footer";
+import { Link } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
@@ -96,7 +97,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <div className="punkapi">
-        <h1 className="punkapi__name">BREWDOG</h1>
+        <Link to ="/"><h1 className="punkapi__name">BREWDOG</h1></Link>
 
         <Routes>
           <Route
