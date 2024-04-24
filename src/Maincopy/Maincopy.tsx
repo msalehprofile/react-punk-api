@@ -10,7 +10,8 @@ type searching = {
 }
 
 const Maincopy = ({beers}: searching) => {
-  console.log(beers)
+  
+
   return (
     <div className="maincopy">
         <div className="maincopy__beers">

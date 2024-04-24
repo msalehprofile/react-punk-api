@@ -1,17 +1,26 @@
-import './Pagination.scss';
-import { Link } from 'react-router-dom';
+import "./Pagination.scss";
+import { Link } from "react-router-dom";
+
+type pageProps = {
+  pages: number[];
+};
+
+const Pagination = ({ pages }: pageProps) => {
+  const handlePageNumber = () => {
+    console.log("hi");
+  };
 
 
-const Pagination = () => {
-    let pages = [];
-    
 
   return (
     <div className="pagination">
-        <Link to=""><p>1</p></Link>
-        <Link to=""><p>2</p></Link>
+      {pages.map((page) => (
+        <Link to="" className={String(page)} onClick={handlePageNumber}>
+          <p>{page}</p>
+        </Link>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;
