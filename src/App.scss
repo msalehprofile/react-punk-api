@@ -14,10 +14,11 @@
     &__name{
         position: fixed;
         top: 0;
+        left: 0;
         width: 100vw;
-        height: 5vh;
+        height: 10vh;
         background-color: white;
-        padding: 30px;
+        padding-top: 30px;
         margin: 0px;
         text-align: center;
     }
@@ -29,7 +30,7 @@
         display: grid;
         align-items: center;
         grid-template-columns: 2fr 8fr;
-        grid-template-rows: 100px 8fr 100px;
+        grid-template-rows: 100px 8fr 50px 100px;
 
 
         &__name{
