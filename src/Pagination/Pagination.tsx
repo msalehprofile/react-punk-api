@@ -1,18 +1,30 @@
+import { Beer } from "../Data/beertypes";
 import "./Pagination.scss";
 import { Link } from "react-router-dom";
 
-
 type pageProps = {
-  pages: number[];
   setCurrentPage: any;
+  beers: Beer[];
+  postPerPage: number;
 };
 
-const Pagination = ({ pages, setCurrentPage }: pageProps) => {
-  
+const Pagination = ({ setCurrentPage, beers, postPerPage }: pageProps) => {
+  const totalPages = Math.ceil(beers.length / postPerPage);
+
+  let pagesArr: number[] = [1];
+  for (let i = 1; i < totalPages; i++) {
+    pagesArr.push(i + 1);
+    console.log(pagesArr);
+  }
+
   return (
     <div className="pagination">
-      {pages.map((page) => (
-        <Link to="" className="pagination__numbers" onClick={()=> (setCurrentPage(page))}>
+      {pagesArr.map((page) => (
+        <Link
+          to=""
+          className="pagination__numbers"
+          onClick={() => setCurrentPage(page)}
+        >
           <p>{page}</p>
         </Link>
       ))}
