@@ -10,15 +10,18 @@ type BeerInfoProps = {
 const BeerInfo = ({ beers }: BeerInfoProps) => {
   const { beerId } = useParams();
 
-  const chooseBeer = beers.find((beer) => String(beer.id) == beerId);
+  const chooseBeer = beers.find((beer) => String(beer.id) === beerId);
+  console.log(chooseBeer)
 
-  if (!chooseBeer) return <p>Couldn't find a beer with that id</p>;
-
+  if (!chooseBeer) return <p className="error-message">Sorry, we could not find a beer with that id</p>;
+  if(!chooseBeer) {
+    console.log("none gilr")
+  }
     return (
     <div className="beer-profile">
         <img
         className="beer-profile__image"
-        src={chooseBeer.image_url}
+        src={chooseBeer.image_url }
         alt="beer breed"/>
         <h2 className="beer-profile__name">{chooseBeer.name}</h2>
 

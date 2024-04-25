@@ -3,12 +3,11 @@ import Navbar from "./Navbar/Navbar";
 import Maincopy from "./Maincopy/Maincopy";
 import { useState, FormEvent, useEffect } from "react";
 import { Beer } from "./Data/beertypes";
-import BeerInfo from "./containers/BeerInfo";
+import BeerInfo from "./BeerInfo/BeerInfo";
 import Footer from "./Footer/Footer";
 import { Link } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Pagination from "./Pagination/Pagination";
-
 
 const App = () => {
   const [beers, setBeers] = useState<Beer[]>([]);
@@ -34,13 +33,13 @@ const App = () => {
     while (true) {
       let updatedURL = `${url}/?per_page=${postPerPage}&page=${currentPage}`;
 
-      if (abvCheck) {
-        updatedURL +=  `&abv_gt=6`;
-      }
+      // if (abvCheck) {
+      //   updatedURL +=  `&abv_gt=6`;
+      // }
 
-      if (rangeCheck  ) {
-        updatedURL += `&brewed_before=12/2009`;
-      }
+      // if (rangeCheck  ) {
+      //   updatedURL += `&brewed_before=12/2009`;
+      // }
 
       const response = await fetch(updatedURL);
 
@@ -60,15 +59,99 @@ const App = () => {
 
     setBeers(allBeers);
 
-    if (acidityCheck === true) {
-      const filteredAcidity = beers.filter((beer) => beer.ph < 4);
-      setBeers(filteredAcidity);
+    if (acidityCheck && !abvCheck && !rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter((beer) => beer.ph < 4);
+      setBeers(filteredBeers);
     }
-
-    if (searchTerm != "") {
-      console.log(searchTerm)
-      const filteredName = beers.filter((beer) => beer.name.toLowerCase().includes(searchTerm));
-      setBeers(filteredName);
+    if (!acidityCheck && abvCheck && !rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter((beer) => beer.abv > 6);
+      setBeers(filteredBeers);
+    }
+    if (!acidityCheck && !abvCheck && rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter(
+        (beer) => Number(beer.first_brewed.slice(3)) < 2010
+      );
+      setBeers(filteredBeers);
+    }
+    if (!acidityCheck && !abvCheck && !rangeCheck && searchTerm != "") {
+      console.log(searchTerm);
+      const filteredBeers = allBeers.filter((beer) =>
+        beer.name.toLowerCase().includes(searchTerm)
+      );
+      setBeers(filteredBeers);
+    }
+    if (acidityCheck && abvCheck && !rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter((beer) => beer.ph < 4 && beer.abv > 6);
+      setBeers(filteredBeers);
+    }
+    if (acidityCheck && !abvCheck && rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter(
+        (beer) => beer.ph < 4 && Number(beer.first_brewed.slice(3)) < 2010
+      );
+      setBeers(filteredBeers);
+    }
+    if (acidityCheck && !abvCheck && !rangeCheck && searchTerm != "") {
+      console.log("these are the beers", beers);
+      const filteredBeers = allBeers.filter(
+        (beer) => beer.ph < 4 && beer.name.toLowerCase().includes(searchTerm)
+      );
+      setBeers(filteredBeers);
+    }
+    if (!acidityCheck && abvCheck && rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter(
+        (beer) => beer.abv > 6 && Number(beer.first_brewed.slice(3)) < 2010
+      );
+      setBeers(filteredBeers);
+    }
+    if (!acidityCheck && abvCheck && !rangeCheck && searchTerm != "") {
+      const filteredBeers = allBeers.filter(
+        (beer) => beer.abv > 6 && beer.name.toLowerCase().includes(searchTerm)
+      );
+      setBeers(filteredBeers);
+    }
+    if (!acidityCheck && !abvCheck && rangeCheck && searchTerm != "") {
+      const filteredBeers = allBeers.filter(
+        (beer) =>
+          Number(beer.first_brewed.slice(3)) < 2010 &&
+          beer.name.toLowerCase().includes(searchTerm)
+      );
+      setBeers(filteredBeers);
+    }
+    if (acidityCheck && abvCheck && rangeCheck && searchTerm === "") {
+      const filteredBeers = allBeers.filter(
+        (beer) =>
+          Number(beer.first_brewed.slice(3)) < 2010 &&
+          beer.abv > 6 &&
+          beer.ph < 4
+      );
+      setBeers(filteredBeers);
+    }
+    if (acidityCheck && abvCheck && !rangeCheck && searchTerm != "") {
+      const filteredBeers = allBeers.filter(
+        (beer) =>
+          beer.name.toLowerCase().includes(searchTerm) &&
+          beer.abv > 6 &&
+          beer.ph < 4
+      );
+      setBeers(filteredBeers);
+    }
+    if (!acidityCheck && abvCheck && rangeCheck && searchTerm != "") {
+      const filteredBeers = allBeers.filter(
+        (beer) =>
+          beer.name.toLowerCase().includes(searchTerm) &&
+          beer.abv > 6 &&
+          Number(beer.first_brewed.slice(3))
+      );
+      setBeers(filteredBeers);
+    }
+    if (acidityCheck && !abvCheck && rangeCheck && searchTerm != "") {
+      const filteredBeers = allBeers.filter(
+        (beer) =>
+          beer.name.toLowerCase().includes(searchTerm) &&
+          beer.ph < 4 &&
+          Number(beer.first_brewed.slice(3))
+      );
+      setBeers(filteredBeers);
     }
   };
 
@@ -77,11 +160,9 @@ const App = () => {
   const firstBeerIndex = lastBeerIndex - postPerPage;
   const currentPost = beers.slice(firstBeerIndex, lastBeerIndex);
 
-  
   useEffect(() => {
     getBeers(abvCheck, rangeCheck, searchTerm, acidityCheck, postPerPage);
   }, [abvCheck, rangeCheck, searchTerm, acidityCheck, postPerPage]);
-
 
   // handling the filters
   const handleSearchInput = (event: FormEvent<HTMLInputElement>) => {
@@ -102,16 +183,18 @@ const App = () => {
   };
 
   const handleFilterReset = () => {
-    setAbvCheck(false)
-    setAcidityCheck(false)
-    setSearchTerm("")
-  }
+    setAbvCheck(false);
+    setAcidityCheck(false);
+    setSearchTerm("");
+  };
 
   return (
     <BrowserRouter>
       <div className="punkapi">
         <Link to="/">
-          <h1 className="punkapi__name" onClick={handleFilterReset}>BREWDOG</h1>
+          <h1 className="punkapi__name" onClick={handleFilterReset}>
+            BREWDOG
+          </h1>
         </Link>
 
         <Routes>
@@ -132,7 +215,6 @@ const App = () => {
                   setCurrentPage={setCurrentPage}
                   beers={beers}
                   postPerPage={postPerPage}
-
                 />
               </>
             }
