@@ -33,14 +33,6 @@ const App = () => {
     while (true) {
       let updatedURL = `${url}/?per_page=${postPerPage}&page=${currentPage}`;
 
-      // if (abvCheck) {
-      //   updatedURL +=  `&abv_gt=6`;
-      // }
-
-      // if (rangeCheck  ) {
-      //   updatedURL += `&brewed_before=12/2009`;
-      // }
-
       const response = await fetch(updatedURL);
 
       if (!response.ok) {
@@ -81,7 +73,9 @@ const App = () => {
       setBeers(filteredBeers);
     }
     if (acidityCheck && abvCheck && !rangeCheck && searchTerm === "") {
-      const filteredBeers = allBeers.filter((beer) => beer.ph < 4 && beer.abv > 6);
+      const filteredBeers = allBeers.filter(
+        (beer) => beer.ph < 4 && beer.abv > 6
+      );
       setBeers(filteredBeers);
     }
     if (acidityCheck && !abvCheck && rangeCheck && searchTerm === "") {
