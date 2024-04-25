@@ -1,21 +1,18 @@
 import "./Pagination.scss";
 import { Link } from "react-router-dom";
 
+
 type pageProps = {
   pages: number[];
+  setCurrentPage: any;
 };
 
-const Pagination = ({ pages }: pageProps) => {
-  const handlePageNumber = () => {
-    console.log("hi");
-  };
-
-
-
+const Pagination = ({ pages, setCurrentPage }: pageProps) => {
+  
   return (
     <div className="pagination">
       {pages.map((page) => (
-        <Link to="" className={String(page)} onClick={handlePageNumber}>
+        <Link to="" className="pagination__numbers" onClick={()=> (setCurrentPage(page))}>
           <p>{page}</p>
         </Link>
       ))}

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Pagination from "./Pagination/Pagination";
 
+
 const App = () => {
   const [beers, setBeers] = useState<Beer[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -16,20 +17,24 @@ const App = () => {
   const [rangeCheck, setRangeCheck] = useState<boolean>(false);
   const [acidityCheck, setAcidityCheck] = useState<boolean>(false);
   const [numberOfPages, setNumberOfPages] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const postPerPage = 50;
+
   const getBeers = async (
     abvCheck: boolean,
     rangeCheck: boolean,
     searchTerm: string,
-    acidityCheck: boolean
+    acidityCheck: boolean,
+    postPerPage: number
   ) => {
     const url = `http://localhost:3333/v2/beers`;
-    const beersPerPage = 50;
+
     let currentPage = 1;
     let pagesArr = [1];
     let allBeers: Beer[] = [];
 
     while (true) {
-      let updatedURL = `${url}/?per_page=${beersPerPage}&page=${currentPage}`;
+      let updatedURL = `${url}/?per_page=${postPerPage}&page=${currentPage}`;
 
       if (abvCheck && !rangeCheck && searchTerm === "") {
         updatedURL = url + `/?abv_gt=6`;
@@ -69,16 +74,14 @@ const App = () => {
       const data: Beer[] = await response.json();
       allBeers = allBeers.concat(data);
 
-      if (data.length < beersPerPage) {
+      if (data.length < postPerPage) {
         break;
       }
 
       currentPage++;
-      
-      pagesArr.push(currentPage)
-    
-      setNumberOfPages(pagesArr);
+      pagesArr.push(currentPage);
 
+      setNumberOfPages(pagesArr);
     }
 
     setBeers(allBeers);
@@ -89,10 +92,18 @@ const App = () => {
     }
   };
 
+  // Getting beers per page
+  const lastBeerIndex = currentPage * postPerPage;
+  const firstBeerIndex = lastBeerIndex - postPerPage;
+  const currentPost = beers.slice(firstBeerIndex, lastBeerIndex);
+  
+
   useEffect(() => {
-    getBeers(abvCheck, rangeCheck, searchTerm, acidityCheck);
+    getBeers(abvCheck, rangeCheck, searchTerm, acidityCheck, postPerPage);
   }, [abvCheck, rangeCheck, searchTerm, acidityCheck]);
 
+
+  // handling the filters
   const handleSearchInput = (event: FormEvent<HTMLInputElement>) => {
     const cleanedInput = event.currentTarget.value.toLowerCase();
     setSearchTerm(cleanedInput);
@@ -130,8 +141,11 @@ const App = () => {
                   handleacidityBox={handleacidityBox}
                   handleRangeBox={handleRangeBox}
                 />
-                <Maincopy searchTerm={searchTerm} beers={beers} />
-                <Pagination pages={numberOfPages} />
+                <Maincopy searchTerm={searchTerm} beers={currentPost} />
+                <Pagination
+                  pages={numberOfPages}
+                  setCurrentPage={setCurrentPage}
+                />
               </>
             }
           />
