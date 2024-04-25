@@ -11,6 +11,7 @@ type searching = {
 
 const Maincopy = ({beers}: searching) => {
   
+  if (beers.length === 0) return <p className="error-message">We have no beers matching those filters</p>;
 
   return (
     <div className="maincopy">
