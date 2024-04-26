@@ -146,7 +146,7 @@ const App = () => {
       setBeers(filteredBeers);
     }
   };
-  console.log(currentPage)
+  console.log(currentPage);
   // Getting beers per page
   const lastBeerIndex = currentPage * postPerPage;
   const firstBeerIndex = lastBeerIndex - postPerPage;
@@ -184,7 +184,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <div className="punkapi">
-        <Link to="/">
+        <Link to="/react-punk-api/">
           <h1 className="punkapi__name" onClick={handleFilterReset}>
             BREWDOG
           </h1>
@@ -192,7 +192,7 @@ const App = () => {
 
         <Routes>
           <Route
-            path="/"
+            path="/react-punk-api/"
             element={
               <>
                 <Navbar
@@ -203,7 +203,11 @@ const App = () => {
                   handleacidityBox={handleacidityBox}
                   handleRangeBox={handleRangeBox}
                 />
-                <Maincopy searchTerm={searchTerm} beers={currentPost} currentPage={currentPage}/>
+                <Maincopy
+                  searchTerm={searchTerm}
+                  beers={currentPost}
+                  currentPage={currentPage}
+                />
                 <Pagination
                   setCurrentPage={setCurrentPage}
                   beers={beers}
@@ -213,7 +217,10 @@ const App = () => {
             }
           />
 
-          <Route path="/:beerId" element={<BeerInfo beers={beers} />} />
+          <Route
+            path="/react-punk-api/:beerId"
+            element={<BeerInfo beers={beers} />}
+          />
         </Routes>
         <Footer />
       </div>

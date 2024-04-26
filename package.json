@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "homepage": "https://msalehprofile.github.io/react-punk-api/",
+  "author": "M Saleh",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
