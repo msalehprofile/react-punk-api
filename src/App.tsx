@@ -66,7 +66,6 @@ const App = () => {
       setBeers(filteredBeers);
     }
     if (!acidityCheck && !abvCheck && !rangeCheck && searchTerm != "") {
-      console.log(searchTerm);
       const filteredBeers = allBeers.filter((beer) =>
         beer.name.toLowerCase().includes(searchTerm)
       );
@@ -85,7 +84,6 @@ const App = () => {
       setBeers(filteredBeers);
     }
     if (acidityCheck && !abvCheck && !rangeCheck && searchTerm != "") {
-      console.log("these are the beers", beers);
       const filteredBeers = allBeers.filter(
         (beer) => beer.ph < 4 && beer.name.toLowerCase().includes(searchTerm)
       );
@@ -180,6 +178,7 @@ const App = () => {
     setAbvCheck(false);
     setAcidityCheck(false);
     setSearchTerm("");
+    setRangeCheck(false);
   };
 
   return (
