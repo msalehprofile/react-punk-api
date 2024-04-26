@@ -11,12 +11,10 @@ const BeerInfo = ({ beers }: BeerInfoProps) => {
   const { beerId } = useParams();
 
   const chooseBeer = beers.find((beer) => String(beer.id) === beerId);
-  console.log(chooseBeer)
+
 
   if (!chooseBeer) return <p className="error-message">Sorry, we could not find a beer with that id</p>;
-  if(!chooseBeer) {
-    console.log("none gilr")
-  }
+
     return (
     <div className="beer-profile">
         <img

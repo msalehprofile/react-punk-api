@@ -14,7 +14,6 @@ const Pagination = ({ setCurrentPage, beers, postPerPage }: pageProps) => {
   let pagesArr: number[] = [1];
   for (let i = 1; i < totalPages; i++) {
     pagesArr.push(i + 1);
-    console.log(pagesArr);
   }
 
   return (
