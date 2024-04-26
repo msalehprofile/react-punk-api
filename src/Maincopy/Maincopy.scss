@@ -6,6 +6,10 @@
     flex-direction: column;
     align-items: center;
   }
+
+  &__page {
+    text-align: center;
+  }
 }
 
 @media screen and (min-width: 800px) {
@@ -19,9 +23,14 @@
       display: grid;
       height:100%;
       grid-template-columns: repeat(3,1fr);
-      grid-template-rows: repeat(4,1fr);
+      grid-template-rows: repeat(5,1fr);
       place-items: center;
       gap: 10px;
+    }
+
+    &__page {
+      text-align: left;
+      padding-left: 35px;
     }
   }
 }
