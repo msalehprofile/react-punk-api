@@ -146,7 +146,7 @@ const App = () => {
       setBeers(filteredBeers);
     }
   };
-
+  console.log(currentPage)
   // Getting beers per page
   const lastBeerIndex = currentPage * postPerPage;
   const firstBeerIndex = lastBeerIndex - postPerPage;
@@ -203,7 +203,7 @@ const App = () => {
                   handleacidityBox={handleacidityBox}
                   handleRangeBox={handleRangeBox}
                 />
-                <Maincopy searchTerm={searchTerm} beers={currentPost} />
+                <Maincopy searchTerm={searchTerm} beers={currentPost} currentPage={currentPage}/>
                 <Pagination
                   setCurrentPage={setCurrentPage}
                   beers={beers}
